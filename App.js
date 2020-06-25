@@ -1,19 +1,69 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
 
-export default function App() {
+import HomeScreen from './views/HomeScreen';
+import NewsScreen from './views/NewsScreen';
+import AddNewsScreen from './views/AddNewsScreen';
+
+
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+function MainTab({navigation}){
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: 'gray',
+        inactiveTintColor: 'lightgray',
+      }}
+    >
+      <Tab.Screen 
+        name="Home" 
+        component={HomeScreen}
+        options={{
+          title: 'หน้าหลัก',
+          tabBarIcon: ({focused, color, size}) => {
+            return <Ionicons name={'ios-book'} size={24} color={color} />
+          },
+        }}
+      />
+      <Tab.Screen
+        name="AddNews"
+        component={AddNewsScreen}
+        options={{
+          title: 'เพิ่มข่าว',
+          tabBarVisible: false,
+          tabBarIcon: ({focused, color, size}) => {
+            return <Ionicons name={'ios-add-circle-outline'} size={24} color={color} />
+          },
+        }}
+      />
+    </Tab.Navigator>
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App(){
+  return(
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: 'lightgray',
+          }
+        }}
+      >
+        <Stack.Screen 
+          name="MainTab"
+          component={MainTab}
+          options={{
+            title: 'Public Journalist',
+          }}
+        />
+        <Stack.Screen name="News" component={NewsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
